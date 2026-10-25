@@ -26,7 +26,7 @@ public class Aset implements DapatDipinjam {
             throw new IllegalArgumentException("Kode tidak boleh kosong!");
         }
         if (nama == null || nama.trim(). isEmpty()) {
-            throw new IllegalArgumentException("Nama tidak boleh kosong"!);
+            throw new IllegalArgumentException("Nama tidak boleh kosong!");
         }
         this.kode = kode;
         this.nama = nama;
