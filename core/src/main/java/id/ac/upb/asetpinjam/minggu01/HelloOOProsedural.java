@@ -1,15 +1,14 @@
 package id.ac.upb.asetpinjam.minggu01;
 
-import id.ac.upb.asetpinjam.config.Varian; 
+import id.ac.upb.asetpinjam.config.Varian;
 
 public final class HelloOOProsedural {
 
     private HelloOOProsedural() {
     }
 
-   public static Function<String, String> pembuatSapaan(String nim) {
-    return nama -> "Aset-Pinjam | " + nama + " | " + nim;
-}
+    public static String sapa(String nama, String nim) {
+        return "Aset-Pinjam | " + nama + " | " + nim;
     }
 
     public static void main(String[] args) {
