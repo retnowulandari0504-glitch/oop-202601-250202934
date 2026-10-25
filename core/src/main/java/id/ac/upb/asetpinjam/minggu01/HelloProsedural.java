@@ -2,9 +2,9 @@ package id.ac.upb.asetpinjam.minggu01;
 
 import id.ac.upb.asetpinjam.config.Varian; 
 
-public final class HelloOOProsedural {
+public final class HelloProsedural {
 
-    private HelloOOProsedural() {
+    private HelloProsedural() {
     }
 
     public static String sapa(String nama, String nim) {
