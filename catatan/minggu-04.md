@@ -7,15 +7,18 @@ Saya mengisi `hitungDenda(int)` di `Aset` lalu menimpanya (override) di `Ruang`,
 Aturan minggu ini sudah pasti, jadi tidak ada keputusan besar. Satu keputusan kecil: rumus denda saya tulis sekali di `Aset` lewat method `protected hitungDenda(int, int)`, lalu tiap subclass hanya mengirim penggandanya. Dengan begitu rumus dan validasi hari negatif tidak ditulis ulang tiga kali. Overriding terjadi pada `hitungDenda(int)` di subclass (dipilih saat program berjalan sesuai tipe objek), sedangkan overloading terjadi pada `hitungDenda(int, int)` dan `cari(kata)` / `cari(kata, jenis)` (dipilih saat kompilasi dari parameter).
 
 ## Kendala
-Kendala utama saya adalah kurang tanda kurung kurawal `{}` saat menambahkan method `hitungDenda` dan `cari(...)`. Karena ada `{` atau `}` yang tidak berpasangan, kompilasi gagal dan seluruh build ikut gagal. Saya mengatasinya dengan membaca nomor baris di pesan error Maven, mengklik tanda kurung di VS Code untuk melihat pasangannya, lalu menambah atau menghapus kurung yang salah dan memastikan method baru berada di dalam class. Saya juga menjalankan `.\scripts\uji.ps1 -Minggu 4` sebelum commit supaya error seperti ini ketahuan di komputer sendiri.
+1. Kurang tanda kurung kurawal `{}` saat menambahkan method `hitungDenda` dan `cari(...)`, sehingga kompilasi gagal. Saya mengatasinya dengan membaca nomor baris di pesan error dan mengklik tanda kurung di VS Code untuk melihat pasangannya.
+2. Tes minggu 4 awalnya gagal: 3 tes `cari` error dengan pesan `TODO minggu 4: cari(String)` karena `KatalogAset` belum saya isi, sedangkan 5 tes `hitungDenda` sudah lulus.
+3. Tombol Run dari ekstensi Code Runner menampilkan banyak error `cannot find symbol` karena hanya mengompilasi satu file. Saya beralih memakai `.\scripts\uji.ps1 -Minggu 4`, yang hasilnya sama dengan CI.
+4. Saat menempel kode `KatalogAset`, isi file sempat tidak berubah (tes yang sama gagal dua kali) karena kode belum tertempel dan tersimpan. Saya memastikannya dengan `Select-String ... 'TODO'` dan `git status --short` sebelum menjalankan tes lagi.
 
-Hasil tes terakhir: awalnya 3 tes `cari` gagal karena `KatalogAset` belum diisi; setelah saya isi, semua tes lulus (27 tes, minggu 1 sampai 4), BUILD SUCCESS. 
+Hasil tes terakhir: semua tes lulus (27 tes, minggu 1 sampai 4), BUILD SUCCESS. Status CI di GitHub: hijau.
 
 ## Penggunaan AI
 - Alat yang dipakai: Claude
-- Bagian yang dibantu AI: `hitungDenda` di `Aset`, `Ruang`, `Laptop`, `AlatLab`, dan kerangka `cari(...)` di `KatalogAset`
+- Bagian yang dibantu AI: `hitungDenda` di `Aset`, `Ruang`, `Laptop`, `AlatLab`, dan `cari(...)` di `KatalogAset`
 - Prompt utama:
   1. Saya menempelkan teks tugas Minggu 4 dan meminta dibuatkan kodenya.
-  2. Saya menempelkan isi `Aset.java` dan `Ruang.java` saya, lalu meminta versi lengkap dengan `hitungDenda`.
-- Yang saya ubah atau tolak dari saran AI, dan alasannya: Menyesuaikan nama field di `KatalogAset` dengan file asli, atau cara membaca `dendaPerHari` sesuai `Varian.java`.
-- Satu hal yang saya pahami lebih baik sekarang: Kerangka: overriding memilih method saat program berjalan sesuai tipe objek sebenarnya, sedangkan overloading memilih saat kompilasi berdasarkan parameter.
+  2. Saya menempelkan hasil `.\scripts\uji.ps1 -Minggu 4` yang menunjukkan 3 tes `cari` gagal, lalu menanyakan penyebabnya dan cara memperbaikinya.
+- Yang saya ubah atau tolak dari saran AI, dan alasannya: Saya menunjukkan isi `KatalogAset.java` asli lebih dulu supaya nama field (`daftar`) dan import cocok, dan saya tidak mengubah `tambah()` dan `semua()` karena sudah disediakan dosen.
+- Satu hal yang saya pahami lebih baik sekarang: overriding memilih method saat program berjalan sesuai tipe objek sebenarnya (misalnya `hitungDenda` di `Laptop`), sedangkan overloading memilih method saat kompilasi berdasarkan parameter (misalnya `cari(kata)` dan `cari(kata, jenis)`).
