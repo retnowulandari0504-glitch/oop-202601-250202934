@@ -9,7 +9,8 @@ Aturan minggu ini sudah pasti, jadi tidak ada keputusan besar. Satu keputusan ke
 ## Kendala
 Kendala utama saya adalah kurang tanda kurung kurawal `{}` saat menambahkan method `hitungDenda` dan `cari(...)`. Karena ada `{` atau `}` yang tidak berpasangan, kompilasi gagal dan seluruh build ikut gagal. Saya mengatasinya dengan membaca nomor baris di pesan error Maven, mengklik tanda kurung di VS Code untuk melihat pasangannya, lalu menambah atau menghapus kurung yang salah dan memastikan method baru berada di dalam class. Saya juga menjalankan `.\scripts\uji.ps1 -Minggu 4` sebelum commit supaya error seperti ini ketahuan di komputer sendiri.
 
-Hasil tes terakhir: semua tes lulus (minggu 1 sampai 4), BUILD SUCCESS. Status CI di GitHub: (isi setelah push, lihat langkah di bawah).
+Hasil tes terakhir: awalnya 3 tes `cari` gagal karena `KatalogAset` belum diisi; setelah saya isi, semua tes lulus (27 tes, minggu 1 sampai 4), BUILD SUCCESS. 
+
 ## Penggunaan AI
 - Alat yang dipakai: Claude
 - Bagian yang dibantu AI: `hitungDenda` di `Aset`, `Ruang`, `Laptop`, `AlatLab`, dan kerangka `cari(...)` di `KatalogAset`
