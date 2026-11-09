@@ -14,7 +14,7 @@ Saya membuat Class Diagram di `docs/uml/class.md` dari kode yang sudah ada (`Ase
 **Membuat Class Diagram (`class.md`).** Kesulitan terbesar adalah menjaga diagram tetap sama dengan kode, bukan sketsa ideal. Ada banyak kelas (`Aset`, `Ruang`, `Laptop`, `AlatLab`, `DendaFlat`, `DendaProgresif`, `KatalogAset`, `Peminjaman`), dan saya harus menentukan visibilitas (`-`, `+`, `#`), tipe, serta relasi dan multiplisitasnya. Saya juga sempat bingung membedakan pewarisan (`Aset <|-- Ruang`), implementasi interface (`DapatDipinjam <|.. Aset`), dan asosiasi (`Peminjaman --> Aset`). Saya mengatasinya dengan membuka file asli satu per satu dan mencocokkan nama atribut dan method sebelum menulis diagram.
 
 
-Hasil tes terakhir: semua tes lulus (35 tes, minggu 1 sampai 6), BUILD SUCCESS. Status CI di GitHub: (isi setelah melihat tandanya).
+Hasil tes terakhir: semua tes lulus, BUILD SUCCESS. Status CI di GitHub: Hijau.
 
 
 ## Penggunaan AI
