@@ -1,23 +1,92 @@
 package id.ac.upb.asetpinjam.mahasiswa;
 
-import org.junit.jupiter.api.Disabled;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import id.ac.upb.asetpinjam.jadwal.JadwalPeminjaman;
+import id.ac.upb.asetpinjam.model.Aset;
+import id.ac.upb.asetpinjam.model.Peminjam;
+import id.ac.upb.asetpinjam.model.Peminjaman;
+import id.ac.upb.asetpinjam.model.Ruang;
+import java.time.LocalDateTime;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-/**
- * FOLDER INI MILIK ANDA. Tulis tes Anda sendiri di sini (minggu 7 dan seterusnya).
- *
- * <p>Tes dosen sengaja tidak menentukan: apakah peminjaman 09:00-11:00 dan 11:00-13:00 pada aset yang sama
- * bentrok? Putuskan, catat alasannya di docs/asumsi.md, lalu tuliskan tesnya di sini.
- * Hapus @Disabled setelah Anda mengisinya.
- *
- * <p>Syarat minggu 10: folder ini memuat minimal 8 tes (tidak termasuk contoh bawaan ini).
- */
+@Tag("week7")
 class BatasBentrokTest {
 
+    private final Peminjam peminjam = new Peminjam("M1", "Budi");
+    private final Aset ruangA = new Ruang("R1", "Ruang A", 30);
+    private final Aset ruangB = new Ruang("R2", "Ruang B", 20);
+
+    private static LocalDateTime jam(int j, int m) {
+        return LocalDateTime.of(2026, 11, 10, j, m);
+    }
+
+    private Peminjaman pinjam(String id, Aset aset, LocalDateTime mulai, LocalDateTime selesai) {
+        return new Peminjaman(id, peminjam, aset, mulai, selesai);
+    }
+
     @Test
-    @Disabled("Isi dengan keputusan Anda tentang batas waktu bentrok")
     void selesaiSamaDenganMulai() {
-        // TODO: buat dua peminjaman pada aset yang sama, satu selesai tepat saat yang lain mulai,
-        // lalu nyatakan hasil yang Anda putuskan dengan assertThat(...).
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(9, 0), jam(11, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(11, 0), jam(13, 0)))).isFalse();
+    }
+
+    @Test
+    void mulaiSamaDenganSelesaiLamaTidakBentrokDariArahSebaliknya() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(11, 0), jam(13, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(9, 0), jam(11, 0)))).isFalse();
+    }
+
+    @Test
+    void tumpangTindihSatuMenitBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(9, 0), jam(11, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(10, 59), jam(13, 0)))).isTrue();
+    }
+
+    @Test
+    void rentangIdentikBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(9, 0), jam(11, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(9, 0), jam(11, 0)))).isTrue();
+    }
+
+    @Test
+    void rentangBaruTerkandungDiDalamLamaBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(8, 0), jam(14, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(10, 0), jam(11, 0)))).isTrue();
+    }
+
+    @Test
+    void rentangBaruMembungkusLamaBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(10, 0), jam(11, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(8, 0), jam(14, 0)))).isTrue();
+    }
+
+    @Test
+    void waktuSamaTetapiAsetBedaTidakBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(9, 0), jam(11, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangB, jam(9, 0), jam(11, 0)))).isFalse();
+    }
+
+    @Test
+    void terpisahJauhTidakBentrok() {
+        JadwalPeminjaman jadwal = new JadwalPeminjaman(2);
+        jadwal.tambah(pinjam("P1", ruangA, jam(8, 0), jam(9, 0)));
+
+        assertThat(jadwal.bentrok(pinjam("P2", ruangA, jam(15, 0), jam(16, 0)))).isFalse();
     }
 }

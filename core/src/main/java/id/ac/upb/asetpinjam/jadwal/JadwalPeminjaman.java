@@ -2,6 +2,8 @@ package id.ac.upb.asetpinjam.jadwal;
 
 import id.ac.upb.asetpinjam.model.Peminjaman;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,26 +36,40 @@ public class JadwalPeminjaman {
     }
 
     /**
-     * TODO minggu 7: true jika {@code baru} bentrok dengan peminjaman yang sudah ada untuk ASET YANG SAMA.
-     * Definisi "bentrok" di batas waktu (selesai sama dengan mulai) adalah KEPUTUSAN ANDA (docs/asumsi.md).
+     * True jika baru bentrok dengan peminjaman yang sudah ada untuk aset yang sama.
+     * Di batas waktu (selesai sama dengan mulai) dianggap TIDAK bentrok.
      */
     public boolean bentrok(Peminjaman baru) {
-        throw new UnsupportedOperationException("TODO minggu 7: bentrok");
+        for (Peminjaman p : daftar) {
+            boolean asetSama = p.getAset().getKode().equals(baru.getAset().getKode());
+            boolean tumpangTindih = baru.getMulai().isBefore(p.getSelesai())
+                    && p.getMulai().isBefore(baru.getSelesai());
+            if (asetSama && tumpangTindih) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    /** TODO minggu 7: semua peminjaman, diurutkan menurut waktu mulai (gunakan Comparator). */
+    /** Semua peminjaman, diurutkan menaik menurut waktu mulai. */
     public List<Peminjaman> semuaUrutMulai() {
-        throw new UnsupportedOperationException("TODO minggu 7: semuaUrutMulai");
+        List<Peminjaman> hasil = new ArrayList<>(daftar);
+        hasil.sort(Comparator.comparing(Peminjaman::getMulai));
+        return hasil;
     }
 
-    /** TODO minggu 7: peminjaman dikelompokkan menurut kode aset. */
+    /** Peminjaman dikelompokkan menurut kode aset. */
     public Map<String, List<Peminjaman>> perAset() {
-        throw new UnsupportedOperationException("TODO minggu 7: perAset");
+        Map<String, List<Peminjaman>> hasil = new HashMap<>();
+        for (Peminjaman p : daftar) {
+            hasil.computeIfAbsent(p.getAset().getKode(), k -> new ArrayList<>()).add(p);
+        }
+        return hasil;
     }
 
-    /** TODO minggu 7: hapus peminjaman berdasarkan id. True jika ada yang terhapus. */
+    /** Hapus peminjaman berdasarkan id. True jika ada yang terhapus. */
     public boolean hapus(String id) {
-        throw new UnsupportedOperationException("TODO minggu 7: hapus");
+        return daftar.removeIf(p -> p.getId().equals(id));
     }
 
     /**
